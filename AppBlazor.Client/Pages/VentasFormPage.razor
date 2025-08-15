@@ -1,0 +1,54 @@
+﻿@page "/formventa"
+<h3>VentasFormPage</h3>
+
+<EditForm Model="@oVenta" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mt-3">
+        <label>Número de Empleado</label>
+        <InputNumber class="form-control" @bind-Value="oVenta.Num_Empl" />
+    </div>
+
+    <div class="mt-3">
+        <label>Nombre</label>
+        <InputText class="form-control" @bind-Value="oVenta.Nombre" />
+    </div>
+
+    <div class="mt-3">
+        <label>Edad</label>
+        <InputNumber class="form-control" @bind-Value="oVenta.Edad" />
+    </div>
+
+    <div class="mt-3">
+        <label>Cargo</label>
+        <InputText class="form-control" @bind-Value="oVenta.Cargo" />
+    </div>
+
+    <div class="mt-3">
+        <label>Fecha de Contrato</label>
+        <InputDate class="form-control" @bind-Value="oVenta.FechaContrato" />
+    </div>
+
+    <div class="mt-3">
+        <label>Cuota</label>
+        <InputNumber class="form-control" @bind-Value="oVenta.Cuota" />
+    </div>
+
+    <div class="mt-3">
+        <label>Ventas</label>
+        <InputNumber class="form-control" @bind-Value="oVenta.Ventas" />
+    </div>
+    <div class="mt-3">
+    <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</EditForm>
+
+@code {
+    public VentasCLS oVenta { get; set; } = new VentasCLS();
+
+    private void Guardar()
+    {
+        Console.WriteLine("Guardando...");
+    }
+}
