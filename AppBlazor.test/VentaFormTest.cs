@@ -13,9 +13,44 @@ namespace AppBlazor.test
             return resultados;
         }
         [Fact]
-        public void ValidarCampos()
+        public void ValidacionFallaCuandoCamposVacios()
         {
+            var venta = new VentasCLS();
 
+            var errores = ValidarModelo(venta);
+
+            Assert.Contains(errores, e => e.ErrorMessage == "El número de empleado es requerido");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "El nombre es obligatorio");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "La edad es requerida");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "El cargo es requerido");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "La fecha de contrato es requerida");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "La cuota es requerida");
+
+            Assert.Contains(errores, e => e.ErrorMessage == "Las ventas son requeridas");
+        }
+
+        [Fact]
+        public void ValidacionDatosCorrectos()
+        {
+            var venta = new VentasCLS
+            {
+                Num_Empl = 1,
+                Nombre = "Erick Chambi",
+                Edad = 18,
+                Cargo = "Vendedor",
+                FechaContrato = new DateTime(2025, 5, 10),
+                Cuota = 60,
+                Ventas = 10
+            };
+
+            var errores = ValidarModelo(venta);
+
+            Assert.Empty(errores);
         }
     }
 }
