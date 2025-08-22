@@ -15,7 +15,7 @@ namespace AppBlazor.test
         [Fact]
         public void ValidacionFallaCuandoCamposVacios()
         {
-            var venta = new VentasCLS();
+            var venta = new VentaCLS();
 
             var errores = ValidarModelo(venta);
 
@@ -37,7 +37,7 @@ namespace AppBlazor.test
         [Fact]
         public void ValidacionDatosCorrectos()
         {
-            var venta = new VentasCLS
+            var venta = new VentaCLS
             {
                 Num_Empl = 1,
                 Nombre = "Erick Chambi",

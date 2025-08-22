@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppBlazor.Entities
 {
-    public class VentasCLS
+    public class VentaCLS
     {
         [Required(ErrorMessage = "El número de empleado es requerido")]
         public int? Num_Empl { get; set; }

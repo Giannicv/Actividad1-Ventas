@@ -1,54 +1,66 @@
-﻿@page "/formventa"
-<h3>VentasFormPage</h3>
+﻿@inject NavigationManager navigationManager;
 
 <EditForm Model="@oVenta" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="mt-3">
         <label>Número de Empleado</label>
         <InputNumber class="form-control" @bind-Value="oVenta.Num_Empl" />
+        <ValidationMessage For="@(() => oVenta.Num_Empl)" />
     </div>
 
     <div class="mt-3">
         <label>Nombre</label>
         <InputText class="form-control" @bind-Value="oVenta.Nombre" />
+        <ValidationMessage For="@(() => oVenta.Nombre)" />
     </div>
 
     <div class="mt-3">
         <label>Edad</label>
         <InputNumber class="form-control" @bind-Value="oVenta.Edad" />
+        <ValidationMessage For="@(() => oVenta.Edad)" />
     </div>
 
     <div class="mt-3">
         <label>Cargo</label>
         <InputText class="form-control" @bind-Value="oVenta.Cargo" />
+        <ValidationMessage For="@(() => oVenta.Cargo)" />
     </div>
 
     <div class="mt-3">
         <label>Fecha de Contrato</label>
         <InputDate class="form-control" @bind-Value="oVenta.FechaContrato" />
+        <ValidationMessage For="@(() => oVenta.FechaContrato)" />
     </div>
 
     <div class="mt-3">
         <label>Cuota</label>
         <InputNumber class="form-control" @bind-Value="oVenta.Cuota" />
+        <ValidationMessage For="@(() => oVenta.Cuota)" />
     </div>
 
     <div class="mt-3">
         <label>Ventas</label>
         <InputNumber class="form-control" @bind-Value="oVenta.Ventas" />
+        <ValidationMessage For="@(() => oVenta.Ventas)" />
     </div>
+
     <div class="mt-3">
-    <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-danger ms-2" @onclick="regresar">Regresar</button>
     </div>
 </EditForm>
 
 @code {
-    public VentasCLS oVenta { get; set; } = new VentasCLS();
+    public VentaCLS oVenta { get; set; } = new VentaCLS();
 
     private void Guardar()
     {
         Console.WriteLine("Guardando...");
+    }
+
+    private void regresar()
+    {
+        navigationManager.NavigateTo("/ventapage");
     }
 }

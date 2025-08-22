@@ -1,10 +1,82 @@
-﻿@page "/ventasPage"
+﻿@page "/ventapage"
 @inject NavigationManager navigationManager
+
 <h3>Ventas</h3>
-<button @onclick="navegar" class="btn btn-primary" >Registrar venta</button>
+
+<button @onclick="navegarPagina" class="btn btn-secondary">Registro de Ventas</button>
+
+@if (lista != null && lista.Count != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Num Empleado</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Cargo</th>
+                <th>Fecha Contrato</th>
+                <th>Cuota</th>
+                <th>Ventas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <td>@item.Num_Empl</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Edad</td>
+                    <td>@item.Cargo</td>
+                    <td>@item.FechaContrato?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Cuota</td>
+                    <td>@item.Ventas</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="(() => recuperarEmpleado(item.Num_Empl ?? 0))">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+                            </svg>
+                        </button>
+                        <button class="btn btn-danger btn-sm" @onclick="(() => eliminarEmpleado(item.Num_Empl ?? 0))">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay empleados registrados.</p>
+}
+
 @code {
-    private void navegar()
+    private void navegarPagina()
     {
         navigationManager.NavigateTo("/formventa");
+    }
+
+    public List<VentaCLS> lista { get; set; } = new List<VentaCLS>();
+
+    protected override Task OnInitializedAsync()
+    {
+        // Datos de prueba
+        lista.Add(new VentaCLS { Num_Empl = 1, Nombre = "Carlos", Edad = 30, Cargo = "Vendedor", FechaContrato = DateTime.Now.AddYears(-2), Cuota = 1000, Ventas = 1200 });
+        lista.Add(new VentaCLS { Num_Empl = 2, Nombre = "Ana", Edad = 28, Cargo = "Asistente", FechaContrato = DateTime.Now.AddYears(-1), Cuota = 800, Ventas = 950 });
+
+        return base.OnInitializedAsync();
+    }
+
+    private void recuperarEmpleado(int num_Empl)
+    {
+        navigationManager.NavigateTo("/formventa/edit/" + num_Empl);
+    }
+
+    private void eliminarEmpleado(int num_Empl)
+    {
+        lista = lista.Where(p => p.Num_Empl != num_Empl).ToList();
     }
 }
