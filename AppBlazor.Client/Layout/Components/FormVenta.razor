@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager navigationManager;
-
+@inject VentaService ventaService;
+<h2>@titulo</h2>
 <EditForm Model="@oVenta" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
 
@@ -53,14 +54,34 @@
 
 @code {
     public VentaCLS oVenta { get; set; } = new VentaCLS();
+    [Parameter]
+
+    public int num_Empl { get; set; }
+    public string titulo { get; set; }
+    
+
 
     private void Guardar()
     {
-        Console.WriteLine("Guardando...");
+        if(titulo== "Agregar representante")
+        {
+            ventaService.guardarVenta(oVenta);
+            navigationManager.NavigateTo("ventapage");
+        }
     }
 
     private void regresar()
     {
         navigationManager.NavigateTo("/ventapage");
+    }
+    protected override Task OnInitializedAsync()
+    {
+        if (num_Empl == 0) titulo = "Agregar representante";
+        else {
+            titulo = "Editar representante";
+            oVenta = ventaService.recuperaVentaPorID(num_Empl);
+        }
+
+        return base.OnInitializedAsync();
     }
 }
