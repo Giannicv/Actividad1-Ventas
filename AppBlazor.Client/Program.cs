@@ -8,5 +8,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
 builder.Services.AddScoped<VentaService>();
+builder.Services.AddScoped<JefeService>();
+builder.Services.AddScoped<SucursalService>();
+
 await builder.Build().RunAsync();

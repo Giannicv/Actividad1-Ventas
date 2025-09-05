@@ -28,5 +28,11 @@ namespace AppBlazor.Entities
         [Required(ErrorMessage = "Las ventas son requeridas")]
         [Range(0, double.MaxValue, ErrorMessage = "Las ventas deben ser un valor numérico positivo")]
         public decimal? Ventas { get; set; }
+
+        //
+        [Range (1,int.MaxValue, ErrorMessage = "Debe seleccionar una sucursal")]
+        public int idsucursal { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un jefe")]
+        public int idjefe { get; set; }
     }
 }

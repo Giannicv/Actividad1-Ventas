@@ -16,6 +16,8 @@ namespace AppBlazor.Entities
         public decimal? Cuota { get; set; }
         public decimal? Ventas { get; set; }
 
+        public string nombresucursal { get; set; } = string.Empty;
+        public string nombrejefe { get; set; } = string.Empty;
 
     }
 }
