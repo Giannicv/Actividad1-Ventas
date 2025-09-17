@@ -3,9 +3,17 @@
 @inject VentaService ventaService
 
 <h3>Representante de venta</h3>
-
-<button @onclick="nuevo" class="btn btn-secondary">Nuevo</button>
-
+<div class="mt-3 mb-3">
+<button @onclick="nuevo" class="btn btn-primary">Nuevo</button>
+</div>
+<div class="input-group mt-3 mb-3">
+    <input type="text" class="form-control"
+           placeholder="Ingrese el nombre de representante de ventas"
+           @bind-value="nombrerepresentante"
+           @bind-value:event="oninput">
+    <button @onclick="buscar" class="btn btn-outline-dark" type="button">Buscar</button>
+    <button @onclick="limpiar" class="btn btn-outline-danger" type="button">Limpiar</button>
+</div>
 @if (lista != null && lista.Count != 0)
 {
     <table class="table">
@@ -59,6 +67,16 @@ else
 }
 
 @code {
+    public string nombrerepresentante { get; set; } = string.Empty;
+    private void limpiar()
+    {
+        nombrerepresentante = "";
+        lista = ventaService.filtrarVentas(nombrerepresentante);
+    }
+    private void buscar()
+    {
+        lista = ventaService.filtrarVentas(nombrerepresentante);
+    }
     private void nuevo()
     {
         navigationManager.NavigateTo("/formventa");
@@ -68,7 +86,6 @@ else
 
     protected override Task OnInitializedAsync()
     {
-        // Datos de prueba
         lista = ventaService.listarVentas();
         return base.OnInitializedAsync();
     }

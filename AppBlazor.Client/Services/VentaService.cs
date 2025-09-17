@@ -5,6 +5,15 @@ namespace AppBlazor.Client.Services
 {
     public class VentaService
     {
+       // public event Func<string,Task> Onsearch = delegate { return Task.CompletedTask; };
+
+       /* public async Task notificarBusqueda(string nombrerepresentante)
+        {
+            if(Onsearch != null)
+            {
+                await Onsearch.Invoke(nombrerepresentante);
+            }
+        }*/
         private List<VentaListCLS> venta;
         //
         private JefeService jefeService;
@@ -22,6 +31,19 @@ namespace AppBlazor.Client.Services
         public List<VentaListCLS> listarVentas()
         {
             return venta;
+        }
+        public List<VentaListCLS> filtrarVentas(string nombretitulo)
+        {
+            List<VentaListCLS> v = listarVentas();
+            if ( nombretitulo=="")
+            {
+                return v;
+            }else
+            {
+                List<VentaListCLS> listaFiltrada = v.Where(p => 
+                p.Nombre.ToUpper().Contains(nombretitulo.ToUpper())).ToList();
+                return listaFiltrada;
+            }
         }
         public void eliminarVenta(int numemp)
         {
