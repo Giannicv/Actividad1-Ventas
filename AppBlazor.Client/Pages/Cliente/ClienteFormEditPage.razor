@@ -1,0 +1,6 @@
+﻿@page "/formcliente/edit/{Codigo:int}"
+<FormCliente CodigoCliente="@Codigo" />
+
+@code {
+    [Parameter] public int Codigo { get; set; }
+}

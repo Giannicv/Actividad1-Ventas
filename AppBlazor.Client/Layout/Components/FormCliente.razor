@@ -1,0 +1,73 @@
+﻿@inject NavigationManager navigationManager
+@inject ClienteService clienteService
+@inject VentaService ventaService
+
+<h2>@titulo</h2>
+
+<EditForm Model="@oCliente" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="mt-3">
+        <label>Código Cliente</label>
+        <InputNumber class="form-control" @bind-Value="oCliente.CodigoCliente" />
+        <ValidationMessage For="@(() => oCliente.CodigoCliente)" />
+    </div>
+
+    <div class="mt-3">
+        <label>Nombre Cliente</label>
+        <InputText class="form-control" @bind-Value="oCliente.NombreCliente" />
+        <ValidationMessage For="@(() => oCliente.NombreCliente)" />
+    </div>
+
+    <div class="mt-3">
+        <label>Representante de Ventas</label>
+        <InputSelect class="form-control" @bind-Value="oCliente.RepresentanteId">
+            <option value="0">-- Seleccione --</option>
+            @foreach (var rep in representantes)
+            {
+                <option value="@rep.num_Empl">@rep.Nombre</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => oCliente.RepresentanteId)" />
+    </div>
+
+    <div class="mt-3">
+        <label>Límite de Crédito</label>
+        <InputNumber class="form-control" @bind-Value="oCliente.LimiteCredito" />
+        <ValidationMessage For="@(() => oCliente.LimiteCredito)" />
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-danger ms-2" @onclick="Regresar">Regresar</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int CodigoCliente { get; set; } = 0;
+
+    public ClienteCLS oCliente { get; set; } = new ClienteCLS();
+    public string titulo { get; set; } = "";
+    public List<VentaListCLS> representantes { get; set; } = new List<VentaListCLS>();
+
+    protected override Task OnInitializedAsync()
+    {
+        representantes = ventaService.listarVentas();
+        if (CodigoCliente == 0) titulo = "Agregar cliente";
+        else
+        {
+            titulo = "Editar cliente";
+            oCliente = clienteService.RecuperarClientePorID(CodigoCliente);
+        }
+        return base.OnInitializedAsync();
+    }
+
+    private void Guardar()
+    {
+        clienteService.GuardarCliente(oCliente);
+        navigationManager.NavigateTo("/clientePage");
+    }
+
+    private void Regresar() => navigationManager.NavigateTo("/clientePage");
+}

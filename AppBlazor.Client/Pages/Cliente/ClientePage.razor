@@ -1,0 +1,66 @@
+﻿@page "/clientePage"
+@inject ClienteService clienteService
+@inject NavigationManager navigationManager
+
+<h3>Clientes</h3>
+<div class="mt-3 mb-3">
+    <button @onclick="Nuevo" class="btn btn-primary">Nuevo</button>
+</div>
+
+<div class="input-group mt-3 mb-3">
+    <input type="text" class="form-control" placeholder="Buscar por nombre"
+           @bind-value="nombreFiltro" @bind-value:event="oninput" />
+    <button @onclick="Buscar" class="btn btn-outline-dark">Buscar</button>
+    <button @onclick="Limpiar" class="btn btn-outline-danger">Limpiar</button>
+</div>
+
+@if (lista != null && lista.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Representante</th>
+                <th>Límite Crédito</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <td>@item.CodigoCliente</td>
+                    <td>@item.NombreCliente</td>
+                    <td>@item.RepresentanteNombre</td>
+                    <td>@item.LimiteCredito</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="(() => Editar(item.CodigoCliente))">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="(() => Eliminar(item.CodigoCliente))">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay clientes registrados.</p>
+}
+
+@code {
+    public string nombreFiltro { get; set; } = "";
+    public List<ClienteListCLS> lista { get; set; } = new List<ClienteListCLS>();
+
+    protected override Task OnInitializedAsync()
+    {
+        lista = clienteService.ListarClientes();
+        return base.OnInitializedAsync();
+    }
+
+    private void Buscar() => lista = clienteService.FiltrarClientes(nombreFiltro);
+    private void Limpiar() { nombreFiltro = ""; lista = clienteService.ListarClientes(); }
+    private void Nuevo() => navigationManager.NavigateTo("/formcliente");
+    private void Editar(int codigo) => navigationManager.NavigateTo($"/formcliente/edit/{codigo}");
+    private void Eliminar(int codigo) { clienteService.EliminarCliente(codigo); lista = clienteService.ListarClientes(); }
+}
