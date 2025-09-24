@@ -2,7 +2,6 @@
 @inject VentaService ventaService;
 
 @inject JefeService jefeService;
-@inject SucursalService sucursalService;
 
 <h2>@titulo</h2>
 <EditForm Model="@oVenta" OnValidSubmit="Guardar">
@@ -60,17 +59,7 @@
         </InputSelect>
         <ValidationMessage For="@(() => oVenta.idjefe)" />
     </div>
-    <div class="mt-3">
-        <label>Sucursal</label>
-        <InputSelect class="form-control" @bind-Value="oVenta.idsucursal">
-            <option value="">-- Seleccione --</option>
-            @foreach (var sucursal in listaSucursales)
-            {
-                <option value="@sucursal.idsucursal">@sucursal.CodigoSucursal</option>
-            }
-        </InputSelect>
-        <ValidationMessage For="@(() => oVenta.idsucursal)" />
-    </div>
+   
     <div class="mt-3">
         <button type="submit" class="btn btn-success">Guardar</button>
         <button type="button" class="btn btn-danger ms-2" @onclick="regresar">Regresar</button>
@@ -85,16 +74,22 @@
     public string titulo { get; set; } = string.Empty;
     
     public List<Jefe> listaJefes { get; set; } = new List<Jefe>();
-    public List<Sucursal> listaSucursales { get; set; } = new List<Sucursal>();
+
 
     private void Guardar()
     {
-        if(titulo== "Agregar representante")
+        if (titulo == "Agregar representante")
         {
             ventaService.guardarVenta(oVenta);
-            navigationManager.NavigateTo("ventapage");
         }
+        else if (titulo == "Editar representante")
+        {
+            ventaService.guardarVenta(oVenta);
+        }
+
+        navigationManager.NavigateTo("ventapage");
     }
+
 
     private void regresar()
     {
@@ -103,7 +98,6 @@
     protected override Task OnInitializedAsync()
     {
         listaJefes = jefeService.listarJefes();
-        listaSucursales = sucursalService.ListarSucursales().Cast<Sucursal>().ToList();
 
         if (num_Empl == 0) titulo = "Agregar representante";
         else {
