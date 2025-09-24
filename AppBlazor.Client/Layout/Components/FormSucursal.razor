@@ -1,0 +1,94 @@
+@inject SucursalService sucursalService
+@inject JefeService jefeService
+@inject NavigationManager navigationManager
+
+@if (jefes == null)
+{
+    <p>Cargando directores...</p>
+}
+else
+{
+    <EditForm Model="oSucursal" OnValidSubmit="Grabar">
+        <DataAnnotationsValidator />
+        
+        <div class="mt-3">
+            <label for="codigo" class="form-label">Código Sucursal:</label>
+            <InputText id="codigo" class="form-control" @bind-Value="oSucursal.CodigoSucursal"></InputText>
+            <ValidationMessage For="@(() => oSucursal.CodigoSucursal)" />
+        </div>
+        <div class="mb-3">
+            <label for="ciudad" class="form-label">Ciudad:</label>
+            <InputText id="ciudad" class="form-control" @bind-Value="oSucursal.Ciudad"></InputText>
+            <ValidationMessage For="@(() => oSucursal.Ciudad)" />
+        </div>
+        <div class="mb-3">
+            <label for="region" class="form-label">Región:</label>
+            <InputText id="region" class="form-control" @bind-Value="oSucursal.Region"></InputText>
+            <ValidationMessage For="@(() => oSucursal.Region)" />
+        </div>
+        <div class="mb-3">
+            <label for="director" class="form-label">Director:</label>
+            <InputSelect id="director" class="form-select" @bind-Value="oSucursal.idjefe">
+                <option value="0">-- Seleccione un Director --</option>
+                @foreach (var jefe in jefes)
+                {
+                    <option value="@jefe.idjefe">@jefe.nombrejefe</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => oSucursal.idjefe)" />
+        </div>
+        <div class="mb-3">
+            <label for="objetivoVenta" class="form-label">Objetivo Venta:</label>
+            <InputNumber id="objetivoVenta" class="form-control" @bind-Value="oSucursal.ObjetivoVenta"></InputNumber>
+            <ValidationMessage For="@(() => oSucursal.ObjetivoVenta)" />
+        </div>
+        <div class="mb-3">
+            <label for="ventasReales" class="form-label">Ventas Reales:</label>
+            <InputNumber id="ventasReales" class="form-control" @bind-Value="oSucursal.VentasReales"></InputNumber>
+            <ValidationMessage For="@(() => oSucursal.VentasReales)" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int IdSucursal { get; set; }
+
+    Sucursal oSucursal = new Sucursal();
+    List<Jefe>? jefes;
+
+    protected override void OnInitialized()
+    {
+        jefes = jefeService.listarJefes();
+        if (IdSucursal != 0)
+        {
+            oSucursal = sucursalService.RecuperarSucursalPorID(IdSucursal);
+        }
+        else
+        {
+            // Asegurarse de que el objeto esté inicializado para "Agregar"
+            oSucursal = new Sucursal { idjefe = 0 }; 
+        }
+    }
+
+    private void Grabar()
+    {
+        if (IdSucursal == 0)
+        {
+            sucursalService.GuardarSucursal(oSucursal);
+        }
+        else
+        {
+            sucursalService.ActualizarSucursal(oSucursal);
+        }
+        navigationManager.NavigateTo("/sucursalPage");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/sucursalPage");
+    }
+}

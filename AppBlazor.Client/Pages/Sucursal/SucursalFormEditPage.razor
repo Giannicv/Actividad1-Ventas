@@ -1,0 +1,7 @@
+@page "/formsucursal/edit/{Id:int}"
+<FormSucursal IdSucursal="@Id" />
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+}

@@ -66,7 +66,7 @@
             <option value="">-- Seleccione --</option>
             @foreach (var sucursal in listaSucursales)
             {
-                <option value="@sucursal.idsucursal">@sucursal.nombresucursal</option>
+                <option value="@sucursal.idsucursal">@sucursal.CodigoSucursal</option>
             }
         </InputSelect>
         <ValidationMessage For="@(() => oVenta.idsucursal)" />
@@ -82,7 +82,7 @@
     
     [Parameter]
     public int num_Empl { get; set; }
-    public string titulo { get; set; }
+    public string titulo { get; set; } = string.Empty;
     
     public List<Jefe> listaJefes { get; set; } = new List<Jefe>();
     public List<Sucursal> listaSucursales { get; set; } = new List<Sucursal>();
@@ -103,7 +103,7 @@
     protected override Task OnInitializedAsync()
     {
         listaJefes = jefeService.listarJefes();
-        listaSucursales = sucursalService.listarSucursales();
+        listaSucursales = sucursalService.ListarSucursales().Cast<Sucursal>().ToList();
 
         if (num_Empl == 0) titulo = "Agregar representante";
         else {

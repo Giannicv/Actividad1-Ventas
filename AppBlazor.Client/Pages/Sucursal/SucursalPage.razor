@@ -1,0 +1,72 @@
+@page "/sucursalPage"
+@inject SucursalService sucursalService
+@inject NavigationManager navigationManager
+
+<h3>Sucursales</h3>
+<div class="mt-3 mb-3">
+    <button @onclick="Nuevo" class="btn btn-primary">Nuevo</button>
+</div>
+
+<div class="input-group mt-3 mb-3">
+    <input type="text" class="form-control" placeholder="Buscar por Código, Ciudad o Región"
+           @bind-value="filtroSucursal" @bind-value:event="oninput" />
+    <button @onclick="Buscar" class="btn btn-outline-dark">Buscar</button>
+    <button @onclick="Limpiar" class="btn btn-outline-danger">Limpiar</button>
+</div>
+
+@if (lista != null && lista.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                
+                <th>Ciudad</th>
+                <th>Región</th>
+                <th>Director</th>
+                <th>Objetivo Venta</th>
+                <th>Ventas Reales</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <td>@item.CodigoSucursal</td>
+                    
+                    <td>@item.Ciudad</td>
+                    <td>@item.Region</td>
+                    <td>@item.DirectorNombre</td>
+                    <td>@item.ObjetivoVenta</td>
+                    <td>@item.VentasReales</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="(() => Editar(item.idsucursal))">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="(() => Eliminar(item.idsucursal))">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay sucursales registradas.</p>
+}
+
+@code {
+    public string filtroSucursal { get; set; } = "";
+    public List<SucursalListCLS> lista { get; set; } = new List<SucursalListCLS>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        lista = sucursalService.ListarSucursales();
+        await base.OnInitializedAsync();
+    }
+
+    private void Buscar() => lista = sucursalService.FiltrarSucursales(filtroSucursal);
+    private void Limpiar() { filtroSucursal = ""; lista = sucursalService.ListarSucursales(); }
+    private void Nuevo() => navigationManager.NavigateTo("/formsucursal");
+    private void Editar(int id) => navigationManager.NavigateTo($"/formsucursal/edit/{id}");
+    private void Eliminar(int id) { sucursalService.EliminarSucursal(id); lista = sucursalService.ListarSucursales(); }
+}

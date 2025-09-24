@@ -24,8 +24,8 @@ namespace AppBlazor.Client.Services
             jefeService = _jefeService;
             sucursalService = _sucursalService;
             venta = new List<VentaListCLS>();
-            venta.Add(new VentaListCLS { num_Empl = 1, Nombre = "Juan Perez", Edad = 19, Cargo = "Cajero", FechaContrato = new DateTime(2020, 10, 3), Cuota = 12, Ventas = 15, nombrejefe = "Juan Guerreros", nombresucursal = "La Paz" });
-            venta.Add(new VentaListCLS { num_Empl = 2, Nombre = "Pablo Duran", Edad = 24, Cargo = "Gerente", FechaContrato = new DateTime(2015, 8, 24), Cuota = 52, Ventas = 65, nombrejefe = "Pedro Gonzales", nombresucursal = "Cochabamba" });
+            venta.Add(new VentaListCLS { num_Empl = 1, Nombre = "Juan Perez", Edad = 19, Cargo = "Cajero", FechaContrato = new DateTime(2020, 10, 3), Cuota = 12, Ventas = 15, nombrejefe = "Juan Guerreros", CodigoSucursal = "SC001", idsucursal = 1 });
+            venta.Add(new VentaListCLS { num_Empl = 2, Nombre = "Pablo Duran", Edad = 24, Cargo = "Gerente", FechaContrato = new DateTime(2015, 8, 24), Cuota = 52, Ventas = 65, nombrejefe = "Pedro Gonzales", CodigoSucursal = "LP001", idsucursal = 2 });
             
         }
         public List<VentaListCLS> listarVentas()
@@ -57,7 +57,7 @@ namespace AppBlazor.Client.Services
             {
                 return new VentaCLS { Num_Empl = obj.num_Empl, Nombre = obj.Nombre, Edad = obj.Edad, Cargo = obj.Cargo, FechaContrato = obj.FechaContrato, Cuota = obj.Cuota, Ventas = obj.Ventas,
                 idjefe = jefeService.recuperarJefePorID(obj.nombrejefe),
-                idsucursal = sucursalService.recuperarSucursalPorID(obj.nombresucursal)};
+                idsucursal = obj.idsucursal};
             }
             else
             {
@@ -69,7 +69,8 @@ namespace AppBlazor.Client.Services
             venta.Add(new VentaListCLS { num_Empl = oVenta.Num_Empl, Nombre = oVenta.Nombre, Edad = oVenta.Edad, 
                 Cargo = oVenta.Cargo, FechaContrato = oVenta.FechaContrato, Cuota = oVenta.Cuota, Ventas = oVenta.Ventas,
             nombrejefe = jefeService.recuperarNombreJefePorID(oVenta.idjefe),
-            nombresucursal = sucursalService.recuperarNombreSucursalPorID(oVenta.idsucursal)});
+            CodigoSucursal = sucursalService.RecuperarSucursalPorID(oVenta.idsucursal).CodigoSucursal,
+            idsucursal = oVenta.idsucursal});
         }
     }
 }
